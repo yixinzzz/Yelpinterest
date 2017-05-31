@@ -1,8 +1,11 @@
 from yelp.client import Client
 from yelp.oauth1_authenticator import Oauth1Authenticator
 from bs4 import BeautifulSoup
-import urllib
 import re
+import urllib
+from flask import Flask
+
+app = Flask(__name__)
 
 def connect_API(consumer_key=None, consumer_secret=None, token=None, token_secret=None):
     """ Yelp API authorization
@@ -75,19 +78,23 @@ def get_data_single_page(yelppage, keywords):
             photos.append(result.get("src"))
     return reviews, photos
 
-def find_food(keywords, location):
+@app.route("/search/<keywords>")
+def find_food(keywords, location = "San Francisco, CA"):
     """
     get restaurant information from searching results
     :param keywords: keywords for the dish
     :param location: city name
     :return: a dictionary of result (key - business_id, value - review list, photo list, business object)
     """
-
+    consumer_key = "8WhklGO_09rGkQZy9xMBQQ"
+    consumer_secret = "aSYhuXHB0U__JcYxWmBU-qm5a5k"
+    token = "ud25l_lGjq4PJPqxX_NXhSQHCbXWdZjq"
+    token_secret = "n4jTgD1PzwiWCSVg-hHac8WHx8o"
     client = connect_API(consumer_key, consumer_secret, token, token_secret)
     businesses_list = get_businesses(client, keywords, location)
 
     info_dict = {}
-    for business in businesses_list[:1]:
+    for business in businesses_list:
         id = business.id
         # print id
         reviews, photos = get_data(id, keywords)
@@ -95,16 +102,19 @@ def find_food(keywords, location):
             info_dict[id] = {"reviews": reviews}
             info_dict[id]["photos"] = photos
             info_dict[id]["business_obj"] = business
-    return info_dict
+    return "\n".join(info_dict.keys())
+
+@app.route("/search", methods = ["POST"])
+def search_app():
+    keywords = request.form.get('food name')
+    return find_food(keywords)
+
+@app.route("/")
+def welcome():
+    return "Welcome to Yelpinterest!"
 
 # main
-consumer_key="8WhklGO_09rGkQZy9xMBQQ"
-consumer_secret="aSYhuXHB0U__JcYxWmBU-qm5a5k"
-token="ud25l_lGjq4PJPqxX_NXhSQHCbXWdZjq"
-token_secret="n4jTgD1PzwiWCSVg-hHac8WHx8o"
-
-keywords = "Pad See Ew"
-location = "San Francisco, CA"
-find_food(keywords, location)
+if __name__ == "__main__":
+    app.run()
 
 
