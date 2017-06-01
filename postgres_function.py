@@ -1,3 +1,11 @@
+"""
+File name: postgres_function.py
+Author: Yixin Zhang
+Version: 11/03/16
+
+This script contains all functions that we'll need for access postgres database
+"""
+
 import psycopg2
 import json_key_value
 
@@ -31,31 +39,32 @@ def select_data(db_cursor, table_name, column_name, constraint):
     select_data_query =  "SELECT " + column_name + " FROM " + table_name + " WHERE " + constraint + ";"
     execute(db_cursor, select_data_query)
 
-# create table
-def creatTable(cursor, jdata):
-    print "Createing table...."
-    create_table(cursor, "yelpData", "yelp_id varchar(70), name varchar(200),\
+def creatTable(cursor, jdata, table_name):
+    try:
+        print "Createing table...."
+        create_table(cursor, "yelpData", "yelp_id varchar(70), name varchar(200),\
                                                         website varchar(400), phone varchar(12) , \
                                                         rating float, review_count numeric, \
                                                         address varchar(70), yelp_deals varchar(100),\
                                                         reviews varchar(300), photos varchar(300)")
-    items = json_key_value.get_data_value(jdata, "data")
-    colname = ", ".join(jdata['headers'])
-    for i in range(len(items)):
-        values = ""
-        for j in colname.split(", "):
-            v = json_key_value.get_data_value(items[i], j)
-            if j == 'yelp_id':
-                values += "'" + v + "'"
-            else:
-                if isinstance(v, unicode):
-                    v = v.encode("utf-8")
-                if isinstance(v, str) and v != "NULL":
-                    v = v.replace("'", "''")
-                    v = "'" + v + "'"
+        items = json_key_value.get_data_value(jdata, "data")
+        colname = ", ".join(jdata['headers'])
+        for i in range(len(items)):
+            values = ""
+            for j in colname.split(", "):
+                v = json_key_value.get_data_value(items[i], j)
+                if j == 'yelp_id':
+                    values += "'" + v + "'"
                 else:
-                    v = str(v)
-                values += ", " + v
-        # print values
-        insert_into_table(cursor, "yelpData", colname, values)
-    print "Table has been created successfully"
+                    if isinstance(v, unicode):
+                        v = v.encode("utf-8")
+                    if isinstance(v, str) and v != "NULL":
+                        v = v.replace("'", "''")
+                        v = "'" + v + "'"
+                    else:
+                        v = str(v)
+                    values += ", " + v
+            insert_into_table(cursor, table_name, colname, values)
+        print "Table has been created successfully!"
+    except psycopg2.ProgrammingError:
+        print "Table has already exist...."

@@ -1,3 +1,12 @@
+"""
+File name: yelpInterest.py
+Author: Yixin Zhang
+Version: 05/18/17
+
+This script creates a schema in Postgres based on the input json file.
+Change username and password to your Postgres in user_definition.py
+"""
+
 import postgres_function
 import user_definition
 from flask import Flask, request, render_template, jsonify, redirect, url_for
@@ -9,9 +18,15 @@ reload(sys)
 
 sys.setdefaultencoding('utf8')
 
-app = Flask(__name__)
+app = Flask(__name__) # set up Flask
 
 def get_ph(keyword, rating = 0):
+    """
+    helper function of get_photos and api_get_photos
+    :param keyword: a string of searhing terms
+    :param rating: a float of user rating
+    :return: a list of image url
+    """
     words = re.findall(r"[\w']+|[\$]\d+", keyword)
     words = [j.replace("'", "''") for j in list(compress(words, [i not in punctuation for i in words]))]
     if 'food' in words:
@@ -29,6 +44,12 @@ def get_ph(keyword, rating = 0):
 app = Flask(__name__)
 @app.route('/search/<keyword>&<rating>', methods=["POST", "GET"])
 def get_photos(keyword, rating = 0):
+    """
+    get photo urls from database based on keyword and rating
+    :param keyword: a string of searhing terms
+    :param rating: a float of user rating
+    :return:
+     """
     results = get_ph(keyword, rating = 0)
     if len(results) > 0:
         return render_template("display_photos.html", results=results)
