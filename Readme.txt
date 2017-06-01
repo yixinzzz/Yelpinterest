@@ -7,4 +7,4 @@ createdb.py | creates a schema in Postgres based on the input json file.
 json_key_value.py | contains helper functions for postgres_function.py
 postgres_function.py | functions for interacting with the database
 user_definition.py | configuration of Postgres credentials
-yelpInterest.py
+yelpInterest.py | the main script running the app
