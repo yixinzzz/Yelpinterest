@@ -3,8 +3,7 @@ File name: yelpInterest.py
 Author: Yixin Zhang
 Version: 05/18/17
 
-This script creates a schema in Postgres based on the input json file.
-Change username and password to your Postgres in user_definition.py
+This script is the main script running the app
 """
 
 import postgres_function
