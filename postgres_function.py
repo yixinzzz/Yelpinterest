@@ -1,7 +1,7 @@
 """
 File name: postgres_function.py
 Author: Yixin Zhang
-Version: 11/03/16
+Version: 06/06/16
 
 This script contains all functions that we'll need for access postgres database
 """
@@ -41,7 +41,7 @@ def select_data(db_cursor, table_name, column_name, constraint):
 
 def creatTable(cursor, jdata, table_name):
     try:
-        print "Createing table...."
+        print "Creating table...."
         create_table(cursor, "yelpData", "yelp_id varchar(70), name varchar(200),\
                                                         website varchar(400), phone varchar(12) , \
                                                         rating float, review_count numeric, \
@@ -67,4 +67,4 @@ def creatTable(cursor, jdata, table_name):
             insert_into_table(cursor, table_name, colname, values)
         print "Table has been created successfully!"
     except psycopg2.ProgrammingError:
-        print "Table has already exist...."
+        print "Table has already existed...."
