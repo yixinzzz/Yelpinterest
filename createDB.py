@@ -1,7 +1,7 @@
 """
 File name: createDB.py
 Author: Yixin Zhang
-Version: 04/12/17
+Version: 06/04/17
 
 This script creates a schema in Postgres based on the input json file.
 Change username and password to your Postgres in user_definition.py
