@@ -1,9 +1,10 @@
 """
 File name: yelpInterest.py
 Author: Yixin Zhang
-Version: 05/18/17
+Version: 06/18/17
 
-This script is the main script running the app
+This is the main script running YelpInterest App
+
 """
 
 import postgres_function
@@ -77,11 +78,15 @@ def post_photos():
     return page
 
 @app.route('/contact')
-def about():
+def contact():
     return render_template("contact.html")
 
+@app.route('/about')
+def about():
+    return render_template("about.html")
+
 @app.route('/')
-@app.route('/index')
+@app.route('/index.html')
 def html():
     return render_template("index.html")
 
