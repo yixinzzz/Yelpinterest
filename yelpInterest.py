@@ -15,6 +15,8 @@ from itertools import compress
 import re
 import sys
 reload(sys)
+import random
+random_int = random.randint(1, 3)
 
 sys.setdefaultencoding('utf8')
 
@@ -85,10 +87,23 @@ def contact():
 def about():
     return render_template("about.html")
 
+
+# @app.route('/index/<path:version>')
 @app.route('/')
-@app.route('/index.html')
+@app.route('/v1')
 def html():
-    return render_template("index.html")
+    return render_template('index1.html')
+# elif random_int == 2:
+@app.route('/')
+@app.route('/v2')
+def html_2(version = 'v2'):
+    return render_template('index2.html')
+# else:
+@app.route('/')
+@app.route('/v3')
+def html_3(version = 'v3'):
+    return render_template('index3.html')
+
 
 # API
 
