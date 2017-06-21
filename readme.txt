@@ -1,6 +1,6 @@
 
 Public URL: 
-http://ec2-52-53-159-60.us-west-1.compute.amazonaws.com:5000/
+http://ec2-52-53-159-60.us-west-1.compute.amazonaws.com
 
 Files:
 createDB.py | creates a schema in Postgres based on the input json file.
